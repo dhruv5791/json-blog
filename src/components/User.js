@@ -18,8 +18,8 @@ export class User extends Component {
     open: PropTypes.bool,
     user: PropTypes.object,
     handleClose: PropTypes.func,
-    viewOnly: PropTypes.bool,
     updateUser: PropTypes.func,
+    editing: PropTypes.bool,
     saveUser: PropTypes.func,
   };
 
@@ -30,13 +30,12 @@ export class User extends Component {
       email: "",
       status: "",
       gender: "",
-      editing: false,
     };
   }
 
   handleForm() {
-    const { editing, name, email, status, gender } = this.state;
-    const { updateUser, saveUser } = this.props;
+    const { name, email, status, gender } = this.state;
+    const { updateUser, saveUser, editing } = this.props;
     if (editing) {
       const { id } = this.props.user;
       updateUser({ id, name, email, status, gender });
@@ -51,27 +50,25 @@ export class User extends Component {
       email: "",
       gender: "",
       status: "",
-      editing: false,
     });
     this.props.handleClose();
   }
 
   componentDidUpdate() {
-    const { user, viewOnly } = this.props;
+    const { user } = this.props;
     if (user && !this.state.name) {
       this.setState({
         name: user.name,
         email: user.email,
         status: user.status,
         gender: user.gender,
-        editing: viewOnly ? false : true,
       });
     }
   }
 
   render() {
-    const { open, handleClose, viewOnly } = this.props;
-    const { name, email, gender, status, editing } = this.state;
+    const { open, handleClose, viewOnly, editing } = this.props;
+    const { name, email, gender, status } = this.state;
     return (
       <Dialog
         disableBackdropClick
@@ -88,7 +85,6 @@ export class User extends Component {
             <Grid item xs={12} sm={6}>
               <TextField
                 required
-                disabled={viewOnly}
                 id="name"
                 value={name}
                 name="name"
@@ -101,7 +97,6 @@ export class User extends Component {
             <Grid item xs={12} sm={6}>
               <TextField
                 required
-                disabled={viewOnly}
                 type="email"
                 value={email}
                 id="email"
@@ -126,12 +121,12 @@ export class User extends Component {
                 >
                   <FormControlLabel
                     value="Female"
-                    control={<Radio disabled={viewOnly} />}
+                    control={<Radio />}
                     label="Female"
                   />
                   <FormControlLabel
                     value="Male"
-                    control={<Radio disabled={viewOnly} />}
+                    control={<Radio />}
                     label="Male"
                   />
                 </RadioGroup>
@@ -151,12 +146,12 @@ export class User extends Component {
                 >
                   <FormControlLabel
                     value="Inactive"
-                    control={<Radio disabled={viewOnly} />}
+                    control={<Radio />}
                     label="Inactive"
                   />
                   <FormControlLabel
                     value="Active"
-                    control={<Radio disabled={viewOnly} />}
+                    control={<Radio />}
                     label="Active"
                   />
                 </RadioGroup>
